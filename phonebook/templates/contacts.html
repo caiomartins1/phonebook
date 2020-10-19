@@ -1,0 +1,25 @@
+{% extends 'base.html' %} 
+{% block title %} Phonebook | Contacts {% endblock %} 
+{% block content %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">First Name</th>
+      <th scope="col">Second Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contact in contacts %}
+    <tr>
+      <td>{{ contact.first_name }}</td>
+      <td>{{ contact.second_name }}</td>
+      <td>{{ contact.email }}</td>
+      <td>{{ contact.phone_number }}</td>
+    </tr>
+    {% endfor %}
+  
+  </tbody>
+</table>
+{% endblock %}
