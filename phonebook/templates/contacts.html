@@ -8,6 +8,7 @@
       <th scope="col">Second Name</th>
       <th scope="col">Email</th>
       <th scope="col">Number</th>
+      <th scope="col">Options</th>
     </tr>
   </thead>
   <tbody>
@@ -17,9 +18,124 @@
       <td>{{ contact.second_name }}</td>
       <td>{{ contact.email }}</td>
       <td>{{ contact.phone_number }}</td>
+      <td>
+        <button id="modalActivate" type="button" class="btn btn-success" data-toggle="modal" data-target="#editContactModal{{contact.id}}">
+          Edit
+        </button>
+        <button id="modalActivate" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteContactModal{{contact.id}}">
+          Delete
+        </button>
+      </td>
     </tr>
+
+    <div class="modal fade right" id="editContactModal{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalPreviewLabel">Edit Contact</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="{% url 'edit' contact.id %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter first name" value="{{ contact.first_name}}">
+              </div>
+              <div class="form-group">
+                <label for="second_name">Second Name</label>
+                <input type="text" name="second_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter second name" value="{{ contact.second_name}}">
+              </div>
+              <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="{{ contact.email}}">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+              </div>
+              <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <input type="text" name="phone_number" class="form-control" id="phone_number"  placeholder="Enter phone number" value="{{ contact.phone_number}}">
+              </div>
+              <button type="submit" class="btn btn-primary">Edit Contact</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade right" id="deleteContactModal{{contact.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalPreviewLabel">Delete Contact</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete <span class="font-weight-bold">{{ contact.first_name }} {{ contact.second_name }}</span> from your phonebook?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <form method="post" id="delete-form" action="{% url 'delete' contact.id %}">
+              {% csrf_token %}
+              <input type="submit" class="btn btn-danger" form="delete-form" value="Delete">
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-  
   </tbody>
 </table>
+<!-- Button trigger modal -->
+<button id="modalActivate" type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewContactModal">
+  Add a new contact
+</button>
+
+<!-- Modal -->
+<div class="modal fade right" id="createNewContactModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalPreviewLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalPreviewLabel">New Contact</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/contacts/create">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" name="first_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter first name">
+          </div>
+          <div class="form-group">
+            <label for="second_name">Second Name</label>
+            <input type="text" name="second_name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter second name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="phone_number">Phone Number</label>
+            <input type="text" name="phone_number" class="form-control" id="phone_number"  placeholder="Enter phone number">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Contact</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
 {% endblock %}
